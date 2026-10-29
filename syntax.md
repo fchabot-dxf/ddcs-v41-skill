@@ -54,6 +54,8 @@ Expression functions (declared; the measured ones are in the Math section): FIX:
 
 ## Math
 
+- SQRT[16] = 4, and TAN[45] * 1000 = 999.9999999999999 (degrees) (1 run each). *(ALIAS_MATH (alias matrix))*
+- An exact == between computed decimals can miss: #v = 0.3 - 0.2, then IF #v == 0.1 did NOT jump (the double is not exactly 0.1; 1 run). Compare with a tolerance instead. *(ALIAS_DEC_AXES (alias matrix))*
 - Precedence is standard: * and / bind before + and -, comparisons last (2 + 3 * 4 = 14; #194-[#197-1]*2 = 479 with #194 = 499 and #197 = 11). *(AUDIT_HW1, AUDIT_MATH1)*
 - ⚠ ROUND truncates toward zero, it does not round: ROUND[2.6] = 2, ROUND[-2.6] = -2, ROUND[SIN[30]*1000] = 499 (the double is 499.99999999999994). *(AUDIT_HW1, AUDIT_MATH1)*
 - ⚠ FUP always adds 1: FUP[2] = 3, FUP[2.1] = 3. Never use FUP for a ceiling here; write FIX[x] + [x GT FIX[x]] for x >= 0 (a comparison is worth 1 or 0). *(AUDIT_MATH1)*
@@ -80,37 +82,50 @@ Each form an assistant may reach for, and what this controller does with it: wor
 | | form | on this controller | bench test |
 |---|---|---|---|
 | Comparison | == (equal) | **works** | AUDIT_HW1 |
-| Comparison | EQ (equal, the word) | not measured |  |
+| Comparison | EQ (equal, the word) | **works** | ALIAS_CMP_WORDS (alias matrix) |
 | Comparison | != (not equal) | **works** | AUDIT_NE_JUMP |
-| Comparison | NE (not equal, the word) | not measured |  |
-| Comparison | <> (not equal) | not measured |  |
+| Comparison | NE (not equal, the word) | **works** | ALIAS_CMP_WORDS (alias matrix) |
+| Comparison | <> (not equal) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 | Comparison | < > <= >= | **works** | AUDIT_HW1 |
-| Comparison | LT GT LE GE (the words) | not measured |  |
-| Logic | AND / OR / XOR | **refused at load** | AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR |
-| Logic | && / \|\| | not measured |  |
+| Comparison | LT GT LE GE (the words) | **works** | ALIAS_CMP_WORDS (alias matrix) |
+| Logic | AND / OR / XOR | **stops mid-run** | AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR, ALIAS_OLD_AND (alias matrix) |
+| Logic | && / \|\| | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Logic | NOT[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Logic | !x (logical not) | **silently wrong** | ALIAS_LOGIC (alias matrix) |
 | Math | MOD[a, b] | **works** | AUDIT_MATH1 |
 | Math | a MOD b (as an operator) | not measured |  |
-| Math | % (remainder) | not measured |  |
+| Math | % (remainder) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 | Math | ^ (power) | **silently wrong** | AUDIT_MATH1 |
-| Math | POW[a, b] | not measured |  |
-| Math | SQRT[x] | **works** | BIBLE_DIV_ZERO, BIBLE_MOD_ZERO, BIBLE_SQRT_NEG, BIBLE_SQRT_VALUE |
-| Math | SQR[x] | not measured |  |
+| Math | POW[a, b] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Math | ** (power) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Math | SQRT[x] | **works** | ALIAS_MATH (alias matrix); BIBLE_DIV_ZERO, BIBLE_MOD_ZERO, BIBLE_SQRT_NEG, BIBLE_SQRT_VALUE |
+| Math | SQR[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Math | TAN[x] | **works** | ALIAS_MATH (alias matrix) |
+| Math | ATAN[x] (one argument) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 | Math | ATAN[y, x] | **works** | S5o, S6g |
-| Math | ATAN[y]/[x] | not measured |  |
-| Words | G00 for G0 | not measured |  |
-| Words | M03 for M3 | not measured |  |
-| Words | lowercase words (g0 x10) | not measured |  |
-| Words | a space inside a word (G 0, X 10) | not measured |  |
-| Words | decimal forms (.5, 5., 5.0) | not measured |  |
+| Math | ATAN[y]/[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Words | G00 for G0 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | G4 for G04 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | M03 for M3 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | lowercase words (g0 x10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | a space inside a word (G 0, X 10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | decimal forms (.5, 5., 5.0) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix); ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix) |
+| Words | leading zeros (X005) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Words | a leading + (X+5, +.5) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Words | an exponent (1e2) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Words | a decimal comma (0,5) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 | Words | H1 for H01 | not measured |  |
 | Words | G04 P3.0 (a decimal dwell) | not measured |  |
 | Jumps | GOTO 5 (a space before the label) | not measured |  |
-| Jumps | GO TO (two words) | not measured |  |
+| Jumps | GO TO (two words) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Jumps | a leading zero in a label (N010, GOTO010) | **works** | ALIAS_FLOW (alias matrix) |
+| Jumps | M099 for M99 | **silently wrong** | ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix) |
 | Jumps | IF #a <= b GOTOn (spaces between the parts) | **works** | AUDIT_V9_spaced_goto |
-| Jumps | IF … THEN … (inline) | **refused at load** | AUDIT_V8_then |
+| Jumps | IF … THEN … (inline) | **stops mid-run** | AUDIT_V8_then, ALIAS_OLD_THEN (alias matrix) |
 | Jumps | an indented N label | **stops mid-run** | AUDIT_LABEL_COL0, AUDIT_LABEL_SP1, AUDIT_LABEL_SP1_FAR |
 | Comments | ; comment | **works** | AUDIT_V1_1505_write |
 | Comments | ( a ( b ) c ) (a nested comment) | **refused at load** | AUDIT_R30 (first attempt) |
+| Comments | / (block delete) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 
 ## Measured on this controller
 
@@ -119,15 +134,23 @@ Each form an assistant may reach for, and what this controller does with it: wor
 - In Macro Mode WHILE [cond] DOn / ENDn loops run (3 passes, exited); in standard mode the body ran once and ENDn errored. Give every WHILE in one program its OWN DO id (never reuse one): two sequential DO1 blocks ran, then the program never reached its end; see v41-hazard-while-do-reuse. *(AUDIT_S5d_macro)*
 - The spaced form IF #a <= b GOTOn runs in Macro Mode. *(AUDIT_V9_spaced_goto)*
 - The clamp written as a negated jump, the assignment, then the label (IF #192 <= 3 GOTO4 / #192 = 3 / N4) clamps correctly. *(AUDIT_V9_spaced_goto (re-run))*
-- An inline IF .. THEN assignment is refused when the file loads ("Unrecognized file format: L<n>"); the program never runs. *(AUDIT_V8_then)*
+- An inline IF .. THEN assignment is not taken: the run stops mid-way when the parser reaches it ("Unrecognized file format: L<n>[IF ... THEN ...]", RESET). Re-run after twelve counted lines, those lines ran; the first run stopped before an earlier FIX line ran, by read-ahead (v41-syntax-partial). *(AUDIT_V8_then, ALIAS_OLD_THEN (alias matrix))*
 - IF #a != b GOTOn works in Macro Mode: with #a = 5, IF #a != 4 jumped and IF #a != 5 fell through, and the run reached its end (2 runs). *(AUDIT_NE_JUMP)*
 - Start every line at column 0. A label at column 0 is a jump target; the same label with ONE leading space is NOT refused at load: the run starts, then stops with "Unrecognized file format: L<n>[N20]" and the status box goes RESET (2 runs). The stop comes by read-ahead, before the line is reached: 20 counted lines before an indented label, and only 14 had run when it stopped (1 run). *(AUDIT_LABEL_COL0, AUDIT_LABEL_SP1, AUDIT_LABEL_SP1_FAR)*
+- The word comparisons EQ, NE, GT, LT, GE and LE all branch in an IF in Macro Mode: with #a = 5, each true case jumped and each false case fell through (IF #a EQ 5, IF #a NE 4, IF #a GT 4, IF #a LT 6, IF #a GE 5, IF #a LE 5; 1 run). *(ALIAS_CMP_WORDS (alias matrix))*
+- These forms are not taken: each stopped the run mid-way with "Unrecognized file format: L<n>[<the line>]" and RESET (1 run each): <> (IF #a <> 4), NOT[0], && and ||, SQR[16], ATAN[1] with one argument, the slash form ATAN[y]/[x] (ATAN[1]/[2]), POW[2, 3], 2 ** 3, 7 % 3, GO TO (two words), a / block delete line, a leading + (X+5, +.5, as a coordinate and as a value), an exponent (1e2) and a decimal comma (0,5). *(ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix))*
+- ⚠ !0 is not a logical NOT: #v = !0 ran to the end and gave 0, with no error (1 run). *(ALIAS_LOGIC (alias matrix))*
+- Word spellings that work (1 run each): G00 X9 and G0 X8 both moved (to 9 and 8); G4 P1 and G04 P1 both dwell; M3 and M03 both switch output 1 on (#1651 read 1); lowercase words (g0 x7, x5) work; a space inside a word works (G 0 X6, X 5, # 400 = 5). *(ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix))*
+- Number forms that work, as a coordinate (G0 X..., the work X read back) and as a value (#v = ...), each giving the value meant (1 run each): 5, 5., 5.0, 0.5, .5, -.5, -5, leading zeros (005), 5.123456789, #v, and [#1+2]. *(ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix))*
+- Decimals (1 run each). There is no "calculator" scaling: an integer word means the same as its decimal twin. X5 = X5.0 and Z5 = Z5.0 (5 mm), and the M98 words I5 = I5.0, R5 = R5., F100 = F100. and S12000 = S12000. read 5, 5, 100 and 12000 in the subprogram. Precision is kept: X5.1234567 read back 5.1234567; X0.0004, X0.0005 and X0.0006 each landed at its own value (no rounding to 0.001); #v = 1/3 is the full double; X-0 is 0. G04 P1000. dwells like G04 P1000, and G04 P4.5 is 4.5 ms, not seconds. *(ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix))*
+- A leading zero in a label works both ways: GOTO604 reached a label written N0604, and GOTO0607 reached N607 (1 run each). *(ALIAS_FLOW (alias matrix))*
+- M099 is not M99: an in-file subprogram ending in M099 ran (its marker set) and then ENDED the program, READY, with no message, and the line after the M98 never ran (6 runs). The same subprogram ending in M99 returned (2 runs, and 11 returns in another run). *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*
 - FIX[] works and truncates: FIX[7 / 2] = 3, FIX[7.9] = 7. *(AUDIT_V8b_fix, AUDIT_HW1)*
 - In a user program (Macro Mode): indirect #[190+#191] = 77 works; == >= <= > < all work (and so does !=, measured on its own: AUDIT_NE_JUMP); a bare GOTO jumps; ABS[0-4] + FIX[7.9] = 11. *(AUDIT_HW1)*
-- Trailing garbage after a valid expression refuses the whole file at load ("Unrecognized file format: L<n>"); it is not truncated. *(S6a, S6b, S6c)*
-- A misspelled value on a real axis word (G0 Xwidht) is refused at its own line. *(S6d)*
-- An unclosed [ is refused at load, but the error names the line AFTER the one holding the [, not the last line of the file: a bad line 7 is reported as line 8 with M30 on line 9. *(S6f (L19 -> L20), AUDIT_REMATH_S6F (L7 -> L8, corrected 2026-10-15))*
-- AND, OR and XOR do not exist on this controller: each is refused at load (the screen reads Unrecognized file format on its line, for example L7[#175 = 1 AND 1]) and the lines before it ran. *(AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR)*
+- Trailing garbage after a valid expression stops the run mid-way when the parser reaches it ("Unrecognized file format: L<n>"); it is not truncated. Re-run after twelve counted lines (#v = #191k8), those lines ran. *(S6a, S6b, S6c, ALIAS_OLD_TRAIL (alias matrix))*
+- A misspelled value on a real axis word (G0 Xwidht) stops the run at its own line; re-run after twelve counted lines, those lines ran. *(S6d, ALIAS_OLD_XWIDHT (alias matrix))*
+- An unclosed [ stops the run mid-way (re-run after twelve counted lines: they ran), and the error names the line AFTER the one holding the [, not the last line of the file: a bad line 7 is reported as line 8 with M30 on line 9. *(S6f (L19 -> L20), AUDIT_REMATH_S6F (L7 -> L8, corrected 2026-10-15), ALIAS_OLD_UNCLOSED (alias matrix))*
+- AND, OR and XOR do not exist on this controller: each stops the run mid-way (the screen reads Unrecognized file format on its line, for example L7[#175 = 1 AND 1]); AND re-run after twelve counted lines, those lines ran. *(AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR, ALIAS_OLD_AND (alias matrix))*
 - ATAN[y, x] (comma form) works and returns DEGREES; the first argument is y: ATAN[1, 2] * 100 = 2656.505. *(S5o, S6g)*
 - G04 P is in MILLISECONDS: P45000 dwelled about 45 s. *(inbound dwell test (P45000))*
 - M47 = repeat the program from its first line, variables carried over: #237 = #237 + 1 / G04 P2000 / IF #237 >= 3 GOTO1 / M47 / N1 / M30 ran 3 passes in 6 s and ended with #237 = 3 (Macro Mode). *(the M47 counter loop (#237))*
