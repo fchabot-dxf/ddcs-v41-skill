@@ -17,7 +17,7 @@ description: Rules for writing G-code and macros for the DDCS V4.1 CNC controlle
 2. Jump with `IF #190<#191GOTO5` and a label line `N5`.
 3. Never write an inline `IF .. THEN` assignment: write a negated jump, the assignment, then the label (syntax.md).
 4. Start every line at column 0.
-5. A comment is `( text )` with no `(` or `)` inside it; a nested `)` can refuse the whole file.
+5. A comment is `( text )` with no `(` or `)` inside it: it ends at its first `)`, the text after that is read as code, and a bad leftover stops the run mid-way.
 6. G04 P is in milliseconds: 1.5 s is `G04 P1500`.
 7. Never keep data in #100: #100 is the DDCS V4.1's dialog control variable: any dialog resets it to 0.
 8. Never keep data in #101: #101-#148 are the DDCS V4.1's own dialog memory (the operator's remembered tool-change and probe defaults).
