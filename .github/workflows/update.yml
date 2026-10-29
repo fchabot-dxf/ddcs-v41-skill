@@ -1,0 +1,24 @@
+# Keeps this skill up to date from its published files, once a day: no token beyond the one GitHub gives every run, no AI.
+# When the published files differ, they replace the ones here (never your vendor/ files) in one commit, tagged with the facts' version.
+name: Update the facts
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Take the published files when they changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node .github/scripts/update.mjs --commit
+      - name: Push the commit and its tag (nothing when unchanged)
+        run: git push --follow-tags

@@ -1,0 +1,3 @@
+# t4014: vendor/ is YOUR controller's files (vendor/README.md): never committed
+vendor/*
+!vendor/README.md
