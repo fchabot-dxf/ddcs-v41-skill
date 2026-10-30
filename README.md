@@ -21,6 +21,8 @@ Measured on: a motorless bench DDCS V4.1, firmware 2025-04-04 (2025-04-04-012-NO
 - `variables.md`
 - `dialogs.md`
 - `hazards.md`
+- `operation.md`
+- `ui.md`
 - `integration.md`
 - `evidence.md`
 - `examples/`
