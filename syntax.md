@@ -93,7 +93,7 @@ Each form an assistant may reach for, and what this controller does with it: ✅
 | Logic | NOT[x] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 | Logic | !x (logical not) | ⚠️ **silently wrong** | ALIAS_LOGIC (alias matrix) |
 | Math | MOD[a, b] | ✅ **works** | AUDIT_MATH1 |
-| Math | a MOD b (as an operator) | ❔ not measured |  |
+| Math | a MOD b (as an operator) | 🛑 **stops mid-run** | the alias gaps, 2026-10-30 |
 | Math | % (remainder) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 | Math | ^ (power) | ⚠️ **silently wrong** | AUDIT_MATH1 |
 | Math | POW[a, b] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
@@ -115,9 +115,9 @@ Each form an assistant may reach for, and what this controller does with it: ✅
 | Words | a leading + (X+5, +.5) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 | Words | an exponent (1e2) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 | Words | a decimal comma (0,5) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Words | H1 for H01 | ❔ not measured |  |
-| Words | G04 P3.0 (a decimal dwell) | ❔ not measured |  |
-| Jumps | GOTO 5 (a space before the label) | ❔ not measured |  |
+| Words | H1 for H01 | ✅ **works** | the alias gaps, 2026-10-30 |
+| Words | G04 P3.0 (a decimal dwell) | ⚠️ **silently wrong** | the alias gaps, 2026-10-30 |
+| Jumps | GOTO 5 (a space before the label) | ✅ **works** | the alias gaps, 2026-10-30 |
 | Jumps | GO TO (two words) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 | Jumps | a leading zero in a label (N010, GOTO010) | ✅ **works** | ALIAS_FLOW (alias matrix) |
 | Jumps | M099 for M99 | ⚠️ **silently wrong** | ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix) |
@@ -143,6 +143,10 @@ Each form an assistant may reach for, and what this controller does with it: ✅
 - ⚠ !0 is not a logical NOT: #v = !0 ran to the end and gave 0, with no error (1 run). *(ALIAS_LOGIC (alias matrix))*
 - Word spellings that work (1 run each): G00 X9 and G0 X8 both moved (to 9 and 8); G4 P1 and G04 P1 both dwell; M3 and M03 both switch output 1 on (#1651 read 1); lowercase words (g0 x7, x5) work; a space inside a word works (G 0 X6, X 5, # 400 = 5). *(ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix))*
 - Number forms that work, as a coordinate (G0 X..., the work X read back) and as a value (#v = ...), each giving the value meant (1 run each): 5, 5., 5.0, 0.5, .5, -.5, -5, leading zeros (005), 5.123456789, #v, and [#1+2]. *(ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix))*
+- 7 MOD 3 (MOD as an operator) is not understood: "Unrecognized file format:L21[#400 = 7 MOD 3]" and a RESET; the parser reached it about 18 lines early, so nothing after that point ran (1 run). Write MOD[7, 3] instead. *(the alias gaps, 2026-10-30)*
+- H1 is the same as H01: G43 H1 and G43 H01 both shifted the work Z by exactly -#1561 (with #1560 = 0; 1 run each, the tool table only read). *(the alias gaps, 2026-10-30)*
+- G04 P3.0 dwells 3 MILLISECONDS, not 3 s: ten of them ran in 13.6 s, the same as no dwell, while ten G04 P3000 took 43.9 s (1 run each). P is always milliseconds, decimal point or not. *(the alias gaps, 2026-10-30)*
+- GOTO 5 (a space before the label) jumps like GOTO5 (1 run each). *(the alias gaps, 2026-10-30)*
 - Decimals (1 run each). There is no "calculator" scaling: an integer word means the same as its decimal twin. X5 = X5.0 and Z5 = Z5.0 (5 mm), and the M98 words I5 = I5.0, R5 = R5., F100 = F100. and S12000 = S12000. read 5, 5, 100 and 12000 in the subprogram. Precision is kept: X5.1234567 read back 5.1234567; X0.0004, X0.0005 and X0.0006 each landed at its own value (no rounding to 0.001); #v = 1/3 is the full double; X-0 is 0. G04 P1000. dwells like G04 P1000, and G04 P4.5 is 4.5 ms, not seconds. *(ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix))*
 - A leading zero in a label works both ways: GOTO604 reached a label written N0604, and GOTO0607 reached N607 (1 run each). *(ALIAS_FLOW (alias matrix))*
 - M099 is not M99: an in-file subprogram ending in M099 ran (its marker set) and then ENDED the program, READY, with no message, and the line after the M98 never ran (6 runs). The same subprogram ending in M99 returned (2 runs, and 11 returns in another run). *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*

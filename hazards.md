@@ -52,6 +52,8 @@
 - ⛔ A line with a leading space does not refuse the file at load: the program starts and stops part-way ("Unrecognized file format: L<n>[...]" and RESET) when the parser reaches that line, before the run gets there (7 lines before it in one run), with no warning at Start. Start every line at column 0. *(AUDIT_LABEL_COL0, AUDIT_LABEL_SP1, AUDIT_LABEL_SP1_FAR)*
 - ⛔ <>, NOT[], &&, ||, SQR[], a one-argument ATAN, ATAN[y]/[x], POW[], **, % (as an operator), GO TO, a / block delete line, a leading + on a number, an exponent (1e2) and a decimal comma (0,5) do not refuse the file at load: the program starts and stops mid-way with RESET. *(ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix))*
 - ⛔ ! is not NOT: #v = !0 gave 0 with no error, and the program went on with that value. *(ALIAS_LOGIC (alias matrix))*
+- ⛔ 7 MOD 3 stops the run (RESET) when the read-ahead reaches it, up to about 18 lines before its own line: use MOD[a, b]. *(the alias gaps, 2026-10-30)*
+- ⛔ G04 P3.0 is 3 ms, not 3 s, with no error: write G04 P3000 for 3 seconds. *(the alias gaps, 2026-10-30)*
 - ⚠ An exact == on a computed decimal can miss with no error: 0.3 - 0.2 == 0.1 was false. Compare with a tolerance. *(ALIAS_DEC_AXES (alias matrix))*
 - ⛔ M099 at the end of a subprogram does not return: the program ends there silently, and the lines after the M98 call never run. Write M99. *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*
 - ⛔ An unknown character in an expression is silently dropped, with no error: 2 + ^3 evaluated to 5. A formula written with ^ (a power in other dialects) computes something else here. *(AUDIT_MATH1)*
