@@ -77,7 +77,7 @@ Expression functions (declared; the measured ones are in the Math section): FIX:
 
 ## Aliases and alternative forms
 
-Each form an assistant may reach for, and what this controller does with it: ✅ works, 🛑 stops mid-run (the run starts, then stops at that line or before it: what had run is in hazards.md), or ⚠️ silently wrong (it runs and computes something else: also in hazards.md). ❔ "not measured" means no bench test has tried it here: do not assume it works.
+Each form you might reach for, and what this controller does with it: ✅ works, 🛑 stops mid-run (the run starts, then stops at that line or before it: what had run is in hazards.md), or ⚠️ silently wrong (it runs and computes something else: also in hazards.md). ❔ "not measured" means no bench test has tried it here: do not assume it works.
 
 | | form | on this controller | bench test |
 |---|---|---|---|

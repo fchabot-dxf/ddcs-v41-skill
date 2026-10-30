@@ -2,7 +2,7 @@
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
-This folder is yours, and git ignores everything in it but this file: this repository never ships the vendor's files (they are the vendor's, referenced here, not re-hosted). Fill it with your own DDCS V4.1's files and the assistant reads them FIRST; with it empty, the assistant uses the lines quoted below. Either way they are **not bench tests**: they show what the vendor's code does, not that a user program behaves the same, and where they disagree with this pack's measured files, **the measured files win**.
+This folder is yours, and git ignores everything in it but this file: this repository never ships the vendor's files (they are the vendor's, referenced here, not re-hosted). Fill it with your own DDCS V4.1's files and they are read FIRST; with it empty, the lines quoted below are used. Either way they are **not bench tests**: they show what the vendor's code does, not that a user program behaves the same, and where they disagree with this pack's measured files, **the measured files win**.
 
 This pack's bench ran firmware 2025-04-04 (2025-04-04-012-NOR); the lines quoted below are from firmware 2025-04-04-012. Yours may be newer: your own copy is what your controller runs.
 
@@ -10,7 +10,7 @@ This pack's bench ran firmware 2025-04-04 (2025-04-04-012-NOR); the lines quoted
 
 1. Copy them off your own controller over the network: its system share (SMB, guest login) is `sysdisk`, and every file below sits at its root. (A USB stick works only if your controller's file manager can copy system files: not tested.)
 2. Or take them from the vendor's firmware update package `ddcsv4(2025-04-04)`, folder `ddcsv4/`; the vendor's own site (ddcnc.com); no download link is given here, so prefer your own controller's copy.
-3. Put each `.nc` file in `vendor/macros/` and each `.rc` file in `vendor/dialogs/`, names unchanged, then write your controller's firmware version on one line in `vendor/VERSION.txt` so the assistant can say which version it read.
+3. Put each `.nc` file in `vendor/macros/` and each `.rc` file in `vendor/dialogs/`, names unchanged, then write your controller's firmware version on one line in `vendor/VERSION.txt`, so whoever reads these files can say which version they came from.
 
 How to read them: a menu or a key runs a macro file; a macro calls a library subprogram with `M98 P<n>` (the O-number below); `MarcoDialog "<file>.rc"` opens a dialog. M<n> runs O<10000 + n> in `slib-m.nc`.
 

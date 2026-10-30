@@ -1,8 +1,8 @@
-# DDCS V4.1 — AI pack
+# DDCS V4.1 — Rulebook
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
-A context pack for an AI assistant that writes G-code and macros for the **DDCS V4.1**: the rules in plain words, the
+The Rulebook for writing G-code and macros for the **DDCS V4.1**: the rules in plain words, the
 syntax that runs on it, the hazards, and the bench evidence behind each measured rule.
 
 Measured on: a motorless bench DDCS V4.1, firmware 2025-04-04 (2025-04-04-012-NOR).
@@ -10,8 +10,7 @@ Measured on: a motorless bench DDCS V4.1, firmware 2025-04-04 (2025-04-04-012-NO
 ## How to load it
 
 - **From git**: clone this repository into `~/.claude/skills/` (it carries a `SKILL.md`) and `git pull` to update it; then fill `vendor/` from your own controller (`vendor/README.md`).
-- **Claude Code**: copy this folder into `~/.claude/skills/` (it carries a `SKILL.md`), or attach the files to a conversation.
-- **Any other assistant**: attach `SKILL.md` first, then the files it points to.
+- **An AI assistant**: in Claude Code, copy this folder into `~/.claude/skills/` (it carries a `SKILL.md`); in any other, attach `SKILL.md` first, then the files it points to.
 
 ## Files
 

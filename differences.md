@@ -2,7 +2,7 @@
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
-**This controller is not Fanuc Macro B and not the DDCS Expert M350.** Each row is a habit an assistant would carry over from one
+**This controller is not Fanuc Macro B and not the DDCS Expert M350.** Each row is a habit you might carry over from one
 of them. The DDCS V4.1 and DDCS Expert M350 cells name the bench test behind them, or say they are not measured; the Fanuc
 Macro B column is general Fanuc practice, not measured here.
 
