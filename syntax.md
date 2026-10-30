@@ -109,6 +109,7 @@ Each form an assistant may reach for, and what this controller does with it: wor
 | Words | M03 for M3 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
 | Words | lowercase words (g0 x10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
 | Words | a space inside a word (G 0, X 10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | a space after # (# 100 = 5) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
 | Words | decimal forms (.5, 5., 5.0) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix); ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix) |
 | Words | leading zeros (X005) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
 | Words | a leading + (X+5, +.5) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
