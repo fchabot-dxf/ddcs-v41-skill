@@ -46,6 +46,10 @@
 - ⛔ ! is not NOT: #v = !0 gave 0 with no error, and the program went on with that value. *(ALIAS_LOGIC (alias matrix))*
 - ⛔ 7 MOD 3 stops the run (RESET) when the read-ahead reaches it, up to about 18 lines before its own line: use MOD[a, b]. *(the alias gaps, 2026-10-30)*
 - ⛔ G04 P3.0 is 3 ms, not 3 s, with no error: write G04 P3000 for 3 seconds. *(the alias gaps, 2026-10-30)*
+- ⛔ M98 P<n> L0 still runs the subprogram once: to skip a call, jump over it. *(the M98 gaps, 2026-10-30)*
+- ⛔ M98 P39110 (a count folded into P) silently calls nothing: write M98 P9110 L3. *(the M98 gaps, 2026-10-30)*
+- ⛔ A file that starts with an O line (O0001) silently does nothing: drop the program-number header. *(the M98 gaps, 2026-10-30)*
+- ⛔ M99 P<n> stops the run (RESET), early, when the read-ahead reaches it: use M99, then GOTO in the caller. *(the M98 gaps, 2026-10-30)*
 - M6 in a program does NOTHING while Pr905 "Tool change command M6 back to reference point 1 pause" is No (the factory value): no pause, no dialog, no move, and the current tool is not set; the program runs on. With Pr905 = Yes, M6 runs the vendor tool change (O10006 in slib-m.nc), whose first move is G53 to the tool-change point, so an unhomed machine stops there ("HOME operation not performed"). *(the M6 test, 2026-10-30 (Pr905 No, then Yes; restored and byte-compared))*
 - ⚠ An exact == on a computed decimal can miss with no error: 0.3 - 0.2 == 0.1 was false. Compare with a tolerance. *(ALIAS_DEC_AXES (alias matrix))*
 - ⛔ M099 at the end of a subprogram does not return: the program ends there silently, and the lines after the M98 call never run. Write M99. *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*
