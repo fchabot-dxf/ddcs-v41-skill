@@ -77,56 +77,56 @@ Expression functions (declared; the measured ones are in the Math section): FIX:
 
 ## Aliases and alternative forms
 
-Each form an assistant may reach for, and what this controller does with it: works, stops mid-run (the run starts, then stops at that line or before it: what had run is in hazards.md), or silently wrong (it runs and computes something else: also in hazards.md). "not measured" means no bench test has tried it here: do not assume it works.
+Each form an assistant may reach for, and what this controller does with it: ✅ works, 🛑 stops mid-run (the run starts, then stops at that line or before it: what had run is in hazards.md), or ⚠️ silently wrong (it runs and computes something else: also in hazards.md). ❔ "not measured" means no bench test has tried it here: do not assume it works.
 
 | | form | on this controller | bench test |
 |---|---|---|---|
-| Comparison | == (equal) | **works** | AUDIT_HW1 |
-| Comparison | EQ (equal, the word) | **works** | ALIAS_CMP_WORDS (alias matrix) |
-| Comparison | != (not equal) | **works** | AUDIT_NE_JUMP |
-| Comparison | NE (not equal, the word) | **works** | ALIAS_CMP_WORDS (alias matrix) |
-| Comparison | <> (not equal) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Comparison | < > <= >= | **works** | AUDIT_HW1 |
-| Comparison | LT GT LE GE (the words) | **works** | ALIAS_CMP_WORDS (alias matrix) |
-| Logic | AND / OR / XOR | **stops mid-run** | AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR, ALIAS_OLD_AND (alias matrix) |
-| Logic | && / \|\| | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Logic | NOT[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Logic | !x (logical not) | **silently wrong** | ALIAS_LOGIC (alias matrix) |
-| Math | MOD[a, b] | **works** | AUDIT_MATH1 |
-| Math | a MOD b (as an operator) | not measured |  |
-| Math | % (remainder) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Math | ^ (power) | **silently wrong** | AUDIT_MATH1 |
-| Math | POW[a, b] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Math | ** (power) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Math | SQRT[x] | **works** | ALIAS_MATH (alias matrix); BIBLE_DIV_ZERO, BIBLE_MOD_ZERO, BIBLE_SQRT_NEG, BIBLE_SQRT_VALUE |
-| Math | SQR[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Math | TAN[x] | **works** | ALIAS_MATH (alias matrix) |
-| Math | ATAN[x] (one argument) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Math | ATAN[y, x] | **works** | S5o, S6g |
-| Math | ATAN[y]/[x] | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Words | G00 for G0 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | G4 for G04 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | M03 for M3 | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | lowercase words (g0 x10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | a space inside a word (G 0, X 10) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | a space after # (# 100 = 5) | **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
-| Words | decimal forms (.5, 5., 5.0) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix); ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix) |
-| Words | leading zeros (X005) | **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
-| Words | a leading + (X+5, +.5) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Words | an exponent (1e2) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Words | a decimal comma (0,5) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Words | H1 for H01 | not measured |  |
-| Words | G04 P3.0 (a decimal dwell) | not measured |  |
-| Jumps | GOTO 5 (a space before the label) | not measured |  |
-| Jumps | GO TO (two words) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
-| Jumps | a leading zero in a label (N010, GOTO010) | **works** | ALIAS_FLOW (alias matrix) |
-| Jumps | M099 for M99 | **silently wrong** | ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix) |
-| Jumps | IF #a <= b GOTOn (spaces between the parts) | **works** | AUDIT_V9_spaced_goto |
-| Jumps | IF … THEN … (inline) | **stops mid-run** | AUDIT_V8_then, ALIAS_OLD_THEN (alias matrix) |
-| Jumps | an indented N label | **stops mid-run** | AUDIT_LABEL_COL0, AUDIT_LABEL_SP1, AUDIT_LABEL_SP1_FAR |
-| Comments | ; comment | **works** | AUDIT_V1_1505_write |
-| Comments | ( a ( b ) c ) (a nested comment) | **stops mid-run** | AUDIT_R30 (first attempt), ALIAS_CMT_NESTED (alias matrix) |
-| Comments | / (block delete) | **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Comparison | == (equal) | ✅ **works** | AUDIT_HW1 |
+| Comparison | EQ (equal, the word) | ✅ **works** | ALIAS_CMP_WORDS (alias matrix) |
+| Comparison | != (not equal) | ✅ **works** | AUDIT_NE_JUMP |
+| Comparison | NE (not equal, the word) | ✅ **works** | ALIAS_CMP_WORDS (alias matrix) |
+| Comparison | <> (not equal) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Comparison | < > <= >= | ✅ **works** | AUDIT_HW1 |
+| Comparison | LT GT LE GE (the words) | ✅ **works** | ALIAS_CMP_WORDS (alias matrix) |
+| Logic | AND / OR / XOR | 🛑 **stops mid-run** | AUDIT_REMATH_AND, AUDIT_REMATH_OR, AUDIT_REMATH_XOR, ALIAS_OLD_AND (alias matrix) |
+| Logic | && / \|\| | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Logic | NOT[x] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Logic | !x (logical not) | ⚠️ **silently wrong** | ALIAS_LOGIC (alias matrix) |
+| Math | MOD[a, b] | ✅ **works** | AUDIT_MATH1 |
+| Math | a MOD b (as an operator) | ❔ not measured |  |
+| Math | % (remainder) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Math | ^ (power) | ⚠️ **silently wrong** | AUDIT_MATH1 |
+| Math | POW[a, b] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Math | ** (power) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Math | SQRT[x] | ✅ **works** | ALIAS_MATH (alias matrix); BIBLE_DIV_ZERO, BIBLE_MOD_ZERO, BIBLE_SQRT_NEG, BIBLE_SQRT_VALUE |
+| Math | SQR[x] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Math | TAN[x] | ✅ **works** | ALIAS_MATH (alias matrix) |
+| Math | ATAN[x] (one argument) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Math | ATAN[y, x] | ✅ **works** | S5o, S6g |
+| Math | ATAN[y]/[x] | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Words | G00 for G0 | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | G4 for G04 | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | M03 for M3 | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | lowercase words (g0 x10) | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | a space inside a word (G 0, X 10) | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | a space after # (# 100 = 5) | ✅ **works** | ALIAS_WORDS, ALIAS_NUM_COORD (alias matrix) |
+| Words | decimal forms (.5, 5., 5.0) | ✅ **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix); ALIAS_DEC_AXES, ALIAS_DEC_ARGS, ALIAS_DWELL_INT / _DOT / _FRAC (alias matrix) |
+| Words | leading zeros (X005) | ✅ **works** | ALIAS_NUM_COORD, ALIAS_NUM_VALUE (alias matrix) |
+| Words | a leading + (X+5, +.5) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Words | an exponent (1e2) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Words | a decimal comma (0,5) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Words | H1 for H01 | ❔ not measured |  |
+| Words | G04 P3.0 (a decimal dwell) | ❔ not measured |  |
+| Jumps | GOTO 5 (a space before the label) | ❔ not measured |  |
+| Jumps | GO TO (two words) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
+| Jumps | a leading zero in a label (N010, GOTO010) | ✅ **works** | ALIAS_FLOW (alias matrix) |
+| Jumps | M099 for M99 | ⚠️ **silently wrong** | ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix) |
+| Jumps | IF #a <= b GOTOn (spaces between the parts) | ✅ **works** | AUDIT_V9_spaced_goto |
+| Jumps | IF … THEN … (inline) | 🛑 **stops mid-run** | AUDIT_V8_then, ALIAS_OLD_THEN (alias matrix) |
+| Jumps | an indented N label | 🛑 **stops mid-run** | AUDIT_LABEL_COL0, AUDIT_LABEL_SP1, AUDIT_LABEL_SP1_FAR |
+| Comments | ; comment | ✅ **works** | AUDIT_V1_1505_write |
+| Comments | ( a ( b ) c ) (a nested comment) | 🛑 **stops mid-run** | AUDIT_R30 (first attempt), ALIAS_CMT_NESTED (alias matrix) |
+| Comments | / (block delete) | 🛑 **stops mid-run** | ALIAS_CMP_WORDS, ALIAS_LOGIC, ALIAS_MATH, ALIAS_FLOW, ALIAS_BLOCKDEL, ALIAS_NUM_COORD, ALIAS_NUM_VALUE, ALIAS_EXP_UPPER (alias matrix) |
 
 ## Measured on this controller
 
