@@ -2,7 +2,7 @@
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
-Each file below is a bench probe that RAN on a real controller. Every code line is as it ran; comment lines about the authors' own tools are left out. "Result" is what was read back.
+Each file below is a bench probe that was tested on this controller. Every code line is as it ran; comment lines about the authors' own tools are left out. "Result" is what was read back.
 
 | file | controller | probe | date | result |
 |---|---|---|---|---|

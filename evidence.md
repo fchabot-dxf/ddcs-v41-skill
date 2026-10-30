@@ -2,7 +2,7 @@
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
-Each measured statement in this pack, the bench test that measured it, and when. Status: [CONFIRMED] = measured on a real controller.
+Each measured statement in this pack, the bench test that measured it, and when. Status: [CONFIRMED] = tested on this controller.
 
 | fact | bench test | date | status |
 |---|---|---|---|
