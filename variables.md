@@ -2,6 +2,21 @@
 
 > Every measured statement names the bench test that measured it (see evidence.md).
 
+## Access: who reads and writes, and when
+
+Where a read or a write comes from, and when it works. Each mark points to the fact that says so: its page, and its bench test there. ✅ works, ⛔ does not, ⚠️ with a catch, ❔ no fact says yet, — does not apply.
+
+| from | read at idle | read during a run | write at idle | write during a run | survives a reboot |
+|---|---|---|---|---|---|
+| the running program | — | ✅ syntax.md (AUDIT_HW1) | — | ✅ syntax.md (AUDIT_HW1) · ⚠️ hazards.md (AUDIT_MSG1) | ✅ dialogs.md (AUDIT_R22) |
+| a hook macro (an M-code body, a K-key or key-N macro, a start or error hook) | ❔ | ❔ | ⚠️ integration.md (a merged slib-m.nc with an O10012 block) | ❔ | ✅ integration.md (a merged slib-m.nc with an O10012 block) |
+| MDI (a line typed on the pendant) | ❔ | ❔ | ❔ | ❔ | ❔ |
+| injected G-code (Modbus register 3000) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) |
+| the uservar file (a PC, over the share) | ✅ integration.md (uservar readback) | ⚠️ integration.md (dispatcher heartbeat #246) · ⚠️ integration.md (AUDIT_LOOKAHEAD_TOAST) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ✅ integration.md (a bench script) |
+| Modbus registers (a PC) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) |
+| the setting file / Param page | ✅ integration.md (a bench script) | ❔ | ⚠️ ui.md (#324 change) | ❔ | ❔ |
+| the pendant | ❔ | ❔ | ⚠️ ui.md (a bench script: numpad * and 5 holds) | ❔ | ❔ |
+
 Source: **DDCS V4.1 Variables list.xlsx**, a variable table for the DDCS V4.1. The descriptions are the table's own words.
 
 ⛔ Never write a variable you have not looked up here. A value of 0 does not mean unused.
