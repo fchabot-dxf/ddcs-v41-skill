@@ -151,6 +151,7 @@ Not measured on this controller:
 
 ## Also measured on this controller
 
+- A (MSG, text) comment, or any (text) comment, shows nothing on the pendant (the screen did not change through a 12 s dwell, 1 run): an operator message needs a MarcoDialog. *(the CAM-file test, 2026-10-30)*
 - A toast with NO Ok/Cancel buttons (frame last field 2, no BUTTON rows) opens, refreshes while the program runs, and closes at #100 = 1 + MarcoDialog. *(AUDIT_R33)*
 - Beep: #1802 = 1 turns the buzzer on, #1802 = 0 (or any value but exactly 1: #1802 = 500 is off) turns it off; a 0.3 s beep is #1802 = 1 / G04 P300 / #1802 = 0. It sounds only with Pr323 "Enable of beep" = Enable (Param page). Always pair = 1 with = 0. *(AUDIT_BEEP1 (owner))*
 - M0 with the instruction in a comment is a readable blocking prompt: the screen shows the current line with its comment; Start resumes. *(AUDIT_P1_m0)*
