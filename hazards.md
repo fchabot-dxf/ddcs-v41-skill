@@ -63,6 +63,8 @@
 - ⛔ F0 is accepted and crawls almost forever: a CAM post that writes F0 on a move stalls the job without a word. *(the feed / speed test, 2026-10-30)*
 - ⛔ A probe move that never touches ends silently at its full distance and the program goes on: a probing routine must check that it touched before using the result. *(the probe / soft-limit test, 2026-10-31)*
 - ⛔ There is no "probe touched" flag: test the position against the G31 target, or the job zeroes on a probe that never touched. *(the probe-flag test, 2026-10-31)*
+- ⛔ Between G41 / G42 and G40 keep only moves: a dwell or a variable read before the G40 stops the run with a segmentation error. *(the leftovers test, 2026-10-31)*
+- ⛔ G68 rotation and G51 scaling do nothing, with no error: a CAM post that rotates or scales with them cuts the part unrotated, unscaled. *(the leftovers test, 2026-10-31)*
 - ⛔ A move past a soft limit stops on the limit and silently ENDS the program: the rest of the job never runs, with no message. *(the probe / soft-limit test, 2026-10-31)*
 - M6 in a program does NOTHING while Pr905 "Tool change command M6 back to reference point 1 pause" is No (the factory value): no pause, no dialog, no move, and the current tool is not set; the program runs on. With Pr905 = Yes, M6 runs the vendor tool change (O10006 in slib-m.nc), whose first move is G53 to the tool-change point, so an unhomed machine stops there ("HOME operation not performed"). *(the M6 test, 2026-10-30 (Pr905 No, then Yes; restored and byte-compared))*
 - ⚠ An exact == on a computed decimal can miss with no error: 0.3 - 0.2 == 0.1 was false. Compare with a tolerance. *(ALIAS_DEC_AXES (alias matrix))*
