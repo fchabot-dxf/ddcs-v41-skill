@@ -14,6 +14,7 @@ Measured on: a motorless bench DDCS V4.1, firmware 2025-04-04 (2025-04-04-012-NO
 
 ## Files
 
+- `LICENSE`
 - `README.md`
 - `SKILL.md`
 - `differences.md`
@@ -36,3 +37,7 @@ Measured on: a motorless bench DDCS V4.1, firmware 2025-04-04 (2025-04-04-012-NO
 ## What it is not
 
 Not bench evidence: `vendor/`, which this repository leaves EMPTY (git ignores it): it is for your own controller's files, and `vendor/README.md` says which and where from. Other people's community notes are not re-published here; `community/conflicts.md` quotes only the claims a measurement contradicts. Everything else is our own material. No controller IDs or serials.
+
+## Licence
+
+CC BY 4.0: you may share and adapt this Rulebook, with credit to the DDCS Rulebook project (this repository). Quoted vendor lines and parameter names belong to their owners and are quoted for reference. The licence's full text is `LICENSE`.
