@@ -50,6 +50,14 @@
 - ⛔ M98 P39110 (a count folded into P) silently calls nothing: write M98 P9110 L3. *(the M98 gaps, 2026-10-30)*
 - ⛔ A file that starts with an O line (O0001) silently does nothing: drop the program-number header. *(the M98 gaps, 2026-10-30)*
 - ⛔ M99 P<n> stops the run (RESET), early, when the read-ahead reaches it: use M99, then GOTO in the caller. *(the M98 gaps, 2026-10-30)*
+- ⛔ A full circle with R (start = end) hangs the controller with no message; only a reboot clears it. Use I / J for full circles. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ G91.1 switches the WHOLE program to incremental (it is read as G91): never send G90.1 / G91.1. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ G92 permanently rewrites the G54 offset and G92.1 does not undo it: zero with G92 only on purpose. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ G10 L2 / L20 does not write the offset: its axis words MOVE the machine. Never use G10 here. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ G28 / G30 HOME the axis (a switch search), they do not go to a reference point: a Fusion / GRBL-post G28 at the end of a job starts a homing run. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ M1 never stops: use M0 where a stop is needed. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ Jumping out of a WHILE and then opening another DO1 hangs the program: leave loops through their END, or use a different DO id. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ LN, EXP, ASIN and ACOS are not functions here: each stops the run when the read-ahead reaches it. *(the CAM-codes batch, 2026-10-30)*
 - M6 in a program does NOTHING while Pr905 "Tool change command M6 back to reference point 1 pause" is No (the factory value): no pause, no dialog, no move, and the current tool is not set; the program runs on. With Pr905 = Yes, M6 runs the vendor tool change (O10006 in slib-m.nc), whose first move is G53 to the tool-change point, so an unhomed machine stops there ("HOME operation not performed"). *(the M6 test, 2026-10-30 (Pr905 No, then Yes; restored and byte-compared))*
 - ⚠ An exact == on a computed decimal can miss with no error: 0.3 - 0.2 == 0.1 was false. Compare with a tolerance. *(ALIAS_DEC_AXES (alias matrix))*
 - ⛔ M099 at the end of a subprogram does not return: the program ends there silently, and the lines after the M98 call never run. Write M99. *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*
