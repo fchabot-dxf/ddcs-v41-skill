@@ -61,6 +61,8 @@
 - ⛔ LN, EXP, ASIN and ACOS are not functions here: each stops the run when the read-ahead reaches it. *(the CAM-codes batch, 2026-10-30)*
 - ⛔ L on a drill cycle repeats the step from the last hole, not the same hole, and K is ignored: write each hole on its own line. *(the drill-cycle test, 2026-10-30)*
 - ⛔ F0 is accepted and crawls almost forever: a CAM post that writes F0 on a move stalls the job without a word. *(the feed / speed test, 2026-10-30)*
+- ⛔ A probe move that never touches ends silently at its full distance and the program goes on: a probing routine must check that it touched before using the result. *(the probe / soft-limit test, 2026-10-31)*
+- ⛔ A move past a soft limit stops on the limit and silently ENDS the program: the rest of the job never runs, with no message. *(the probe / soft-limit test, 2026-10-31)*
 - M6 in a program does NOTHING while Pr905 "Tool change command M6 back to reference point 1 pause" is No (the factory value): no pause, no dialog, no move, and the current tool is not set; the program runs on. With Pr905 = Yes, M6 runs the vendor tool change (O10006 in slib-m.nc), whose first move is G53 to the tool-change point, so an unhomed machine stops there ("HOME operation not performed"). *(the M6 test, 2026-10-30 (Pr905 No, then Yes; restored and byte-compared))*
 - ⚠ An exact == on a computed decimal can miss with no error: 0.3 - 0.2 == 0.1 was false. Compare with a tolerance. *(ALIAS_DEC_AXES (alias matrix))*
 - ⛔ M099 at the end of a subprogram does not return: the program ends there silently, and the lines after the M98 call never run. Write M99. *(ALIAS_FLOW_M099, ALIAS_FLOW_M099_ARG, ALIAS_FLOW_M099_FREE, ALIAS_FLOW_M99_FREE, ALIAS_DEC_ARGS (alias matrix))*
