@@ -50,7 +50,8 @@
 - ⛔ M98 P39110 (a count folded into P) silently calls nothing: write M98 P9110 L3. *(the M98 gaps, 2026-10-30)*
 - ⛔ A file that starts with an O line (O0001) silently does nothing: drop the program-number header. *(the M98 gaps, 2026-10-30)*
 - ⛔ M99 P<n> stops the run (RESET), early, when the read-ahead reaches it: use M99, then GOTO in the caller. *(the M98 gaps, 2026-10-30)*
-- ⛔ A full circle with R (start = end) hangs the controller with no message; only a reboot clears it. Use I / J for full circles. *(the CAM-codes batch, 2026-10-30)*
+- ⛔ A full circle with R (start = end) hangs the controller with no message, sometimes until a reboot. Use I / J, or two half-circles: a CAM post set to R arcs can emit one. *(the CAM-codes batch + the R-circle investigation, 2026-10-30)*
+- ⛔ An R too small for its end point is silently enlarged, not refused: the arc cuts a different shape than written. *(the R-circle investigation, 2026-10-30)*
 - ⛔ G91.1 switches the WHOLE program to incremental (it is read as G91): never send G90.1 / G91.1. *(the CAM-codes batch, 2026-10-30)*
 - ⛔ G92 permanently rewrites the G54 offset and G92.1 does not undo it: zero with G92 only on purpose. *(the CAM-codes batch, 2026-10-30)*
 - ⛔ G10 L2 / L20 does not write the offset: its axis words MOVE the machine. Never use G10 here. *(the CAM-codes batch, 2026-10-30)*
