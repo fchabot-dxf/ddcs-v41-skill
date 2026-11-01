@@ -4,6 +4,7 @@
 
 ## Measured on this controller
 
+- The Shift menu is the "Main page menu": Goto zero, Zero, Home, Probe, Advanced machining, Bias management, Breakpoint, Coordinate origin, Centers, Simulation. Advanced machining opens Advanced Startup, Array machining, Sequence machining, Milling plane machining and Milling cylindrical machining. There is NO MDI page and NO Param page in this menu (the Param page is reached another way, not yet measured; no MDI page was found), and walking the menu wrote no value (1 walk). *(the Shift-menu walk, 2026-11-01)*
 - Param page edits are saved ONLY when the page is left with Main... (F7); Esc or Logout discards them without a word. *(#324 change, settings file watched)*
 - A USB keyboard works: arrows jog, numpad Enter = Start (with NumLock ON; with NumLock OFF it turns the SPINDLE on: v41-kbd-numpad-enter), Pause = Pause, numpad 0 = Reset, Tab = file manager; Esc does nothing outside a dialog. *(owner keyboard test)*
 - Print Screen saves the screen to /local/BMP<n>.bmp (1024x600, 16-bit). The counter restarts at BMP0 each boot and OVERWRITES the old BMP0.bmp: copy screenshots off before a power-cycle. *(owner Print Screen test)*
