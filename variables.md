@@ -8,7 +8,7 @@ Where a read or a write comes from, and when it works. Each mark points to the f
 
 | from | read at idle | read during a run | write at idle | write during a run | survives a reboot |
 |---|---|---|---|---|---|
-| the running program | — | ✅ syntax.md (AUDIT_HW1) | — | ✅ syntax.md (AUDIT_HW1) · ⚠️ hazards.md (AUDIT_MSG1) | ✅ dialogs.md (AUDIT_R22) |
+| the running program | — | ✅ syntax.md (AUDIT_HW1) · ✅ integration.md (SWEEP #470) · ✅ integration.md (SWEEP #103) · ✅ integration.md (SWEEP #612) · ✅ integration.md (SWEEP #790) · ✅ integration.md (SWEEP #1508) · ✅ integration.md (SWEEP #1651) · ✅ integration.md (SWEEP #1824) · ⛔ integration.md (SWEEP #1806) | — | ✅ syntax.md (AUDIT_HW1) · ⚠️ hazards.md (AUDIT_MSG1) · ✅ integration.md (SWEEP #470) · ✅ integration.md (SWEEP #103) · ✅ integration.md (SWEEP #612) · ✅ integration.md (SWEEP #790) · ✅ integration.md (SWEEP #1508) · ✅ integration.md (SWEEP #1651) · ⛔ integration.md (SWEEP #1824) · ✅ integration.md (SWEEP #1806) | ✅ dialogs.md (AUDIT_R22) · ✅ integration.md (SWEEP #470) · ✅ integration.md (SWEEP #103) · ✅ integration.md (SWEEP #612) · ✅ integration.md (SWEEP #790) · ✅ integration.md (SWEEP #1508) · ⛔ integration.md (SWEEP #1651) · ⛔ integration.md (SWEEP #1824) |
 | a hook macro (an M-code body, a K-key or key-N macro, a start or error hook) | ❔ | ❔ | ⚠️ integration.md (a merged slib-m.nc with an O10012 block) | ❔ | ✅ integration.md (a merged slib-m.nc with an O10012 block) |
 | MDI (a line typed on the pendant) | ❔ | ❔ | ❔ | ❔ | ❔ |
 | injected G-code (Modbus register 3000) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) |
@@ -36,6 +36,7 @@ What is declared or measured about these variables beyond the table, each with i
 | #104 | ⛔ reserved | #101-#148 are the DDCS V4.1's own dialog memory (M6.rc binds #102-#105). Never keep data in it. | declared; not bench-measured |
 | #490-#536 | ⛔ do not write | #490-#536 are the V4.1 firmware's own (its macros write them; #490-#495 hold the machine position for power-off recovery), never a variable to store data in | BIBLE_M98_POS_H and BIBLE_M98_POS_D (slots #490-#495), the vendor safez.nc |
 | #500-#1499 | ⛔ do not write | The system parameter area (the Param page): a write changes a machine setting. | the variable table names it |
+| #790-#844 | measured | Parameters (#790 is Pr290), not a position as on the Expert: the work position is #1506-#1508, in the #1500 block. | SWEEP #790; the variable sweep (a bench script SWEEP_WRITE / SWEEP_PARAM_LEAVE / SWEEP_READ), soft reboots between |
 | #1500-#1503 | ⛔ do not write | The machine position: never write it. | the variable table names it |
 | #1505 | measured | Not a dialog on this controller: writing it is a silent variable write, no message, no pause. | AUDIT_P2_1505 |
 | #1506-#1509 | ⛔ do not write | The work position: a write moves the work zero. The vendor's zeroxy.nc and zeroall.nc set zero by writing it; never as scratch. | the variable table names it |
@@ -74,7 +75,7 @@ What is declared or measured about these variables beyond the table, each with i
 
 | variables | description | note |
 |---|---|---|
-| #500-#1499 | System parameter area (set on the parameter page) | ⛔ do not write |
+| #500-#1499 | System parameter area (set on the parameter page) | ⛔ do not write, measured |
 | #1500 | Mach position of X axis | ⛔ do not write |
 | #1501 | Mach position of Y axis | ⛔ do not write |
 | #1502 | Mach position of Z axis | ⛔ do not write |
