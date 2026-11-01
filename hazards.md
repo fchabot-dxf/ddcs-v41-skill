@@ -63,6 +63,7 @@
 - ⛔ F0 is accepted and crawls almost forever: a CAM post that writes F0 on a move stalls the job without a word. *(the feed / speed test, 2026-10-30)*
 - ⛔ A probe move that never touches ends silently at its full distance and the program goes on: a probing routine must check that it touched before using the result. *(the probe / soft-limit test, 2026-10-31)*
 - ⛔ There is no "probe touched" flag: test the position against the G31 target, or the job zeroes on a probe that never touched. *(the probe-flag test, 2026-10-31)*
+- ⛔ Esc inside a panel-menu dialog closes the whole menu; the next arrow key then jogs an axis. Look at the screen after every Esc. *(the Shift-menu walk, 2026-11-01)*
 - ⛔ Between G41 / G42 and G40 keep only moves: a dwell or a variable read before the G40 stops the run with a segmentation error. *(the leftovers test, 2026-10-31)*
 - ⛔ G68 rotation and G51 scaling do nothing, with no error: a CAM post that rotates or scales with them cuts the part unrotated, unscaled. *(the leftovers test, 2026-10-31)*
 - ⛔ A move past a soft limit stops on the limit and silently ENDS the program: the rest of the job never runs, with no message. *(the probe / soft-limit test, 2026-10-31)*
