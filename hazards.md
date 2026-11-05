@@ -52,11 +52,11 @@
 - ⛔ M98 P39110 (a count folded into P) silently calls nothing: write M98 P9110 L3. *(the M98 gaps, 2026-10-30)*
 - ⛔ A file that starts with an O line (O0001) silently does nothing: drop the program-number header. *(the M98 gaps, 2026-10-30)*
 - ⛔ M99 P<n> stops the run (RESET), early, when the read-ahead reaches it: use M99, then GOTO in the caller. *(the M98 gaps, 2026-10-30)*
-- ⛔ Macro variables terminate at #1999: accessing #2000 or above triggers an immediate syntax error (RESET) before motion starts. Never port Expert #2000-series code to V4.1. *(FIRMWARE-RE 0x0009710c; bench run 2026-11-03)*
+- ⛔ Macro variables terminate at #1999: accessing #2000 or above triggers an immediate syntax error (RESET) before motion starts. Never port Expert #2000-series code to V4.1. *(FIRMWARE-RE 0x0009710c; bench runs 2026-11-03 and 2026-11-04 (t4024))*
 - ⛔ Never specify both center offsets (I/J/K) and radius (R) on the same G2/G3 block: mixing them halts the controller immediately in RESET with Error 33 before motion starts. *(FIRMWARE-RE 0x000d2c00; bench run 2026-11-03)*
 - ⛔ Never start G41/G42 or cancel G40 on a circular arc (G2/G3): cutter radius compensation startup and cancel must be programmed on linear (G0/G1) moves, or Error 36 halts execution. *(FIRMWARE-RE 0x000d1b60; bench run 2026-11-03)*
 - ⛔ Feed rate F is non-modal in G93: every motion block in G93 must have an explicit F word (F = 1/T in minutes), or Error 38 halts the program. *(FIRMWARE-RE 0x000d1880; bench run 2026-11-03)*
-- ⛔ Never write subprogram return with a space as M 99: token 331 matches unspaced M99 only. Spaced M 99 silently exits the file without returning to the caller, skipping all caller logic after the call. *(FIRMWARE-RE 0x0009cda0; bench run 2026-11-03)*
+- ⛔ Never write subprogram return with a space as M 99: token 331 matches unspaced M99 only. Spaced M 99 does not return to the caller (the line after the call never runs) and does not end the file: the rest of the subprogram runs on. *(FIRMWARE-RE 0x0009cda0; bench runs 2026-11-03 and 2026-11-04 (t4024))*
 - ⛔ Never use G10 to set work coordinates or tool offsets: G10 is silently ignored without an alarm, causing the tool to cut at the wrong coordinate location. *(FIRMWARE-RE & BENCH 2026-11-03)*
 - ⛔ Never use G68/G69 for part or coordinate rotation: G68 is silently ignored without an alarm, cutting the entire geometry at 0 degrees. *(FIRMWARE-RE & BENCH 2026-11-03)*
 - ⛔ Never write infix MOD in macro arithmetic: Fanuc expression #1 = A MOD B aborts with Error 7; use prefix syntax #1 = MOD[A, B]. *(FIRMWARE-RE & BENCH 2026-11-03)*
@@ -64,6 +64,7 @@
 - ⚠ ROUND[x] truncates toward zero like FIX: values with fractional part >= 0.5 (e.g. 10.9) evaluate to 10.0; use FIX[x + 0.5] for true rounding. *(FIRMWARE-RE & BENCH 2026-11-03)*
 - ⛔ Program end M02 does NOT stop execution: M02 behaves as a NO-OP and falls through into subsequent code. Always use M30 to end programs. *(bench run 2026-11-03)*
 - ⛔ EXP[x] and LN[x] do not exist in the macro language: calling them aborts the program with Error 7 (RESET). *(bench run 2026-11-03)*
+- ⚠️ G04 X<n>, the Fanuc dwell in seconds, is accepted with no error and is NOT seconds on the V4.1 (6 x G04 X5 took under 14 s): write G04 P in milliseconds. *(bench run 2026-11-04 (t4024))*
 - ⛔ G28.1 truncates to G28 and starts an unbounded physical switch search. Never emit G28.1. *(bench run 2026-11-03)*
 - ⛔ A full circle with R (start = end) hangs the controller with no message, sometimes until a reboot. Use I / J, or two half-circles: a CAM post set to R arcs can emit one. *(the CAM-codes batch + the R-circle investigation, 2026-10-30)*
 - ⛔ An R too small for its end point is silently enlarged, not refused: the arc cuts a different shape than written. *(the R-circle investigation, 2026-10-30)*
@@ -75,7 +76,7 @@
 - ⛔ M1 never stops: use M0 where a stop is needed. *(the CAM-codes batch, 2026-10-30)*
 - ⛔ Jumping out of a WHILE and then opening another DO1 hangs the program: leave loops through their END, or use a different DO id. *(the CAM-codes batch, 2026-10-30)*
 - ⛔ LN, EXP, ASIN and ACOS are not functions here: each stops the run when the read-ahead reaches it. *(the CAM-codes batch, 2026-10-30)*
-- ⛔ ClearCoords and RecordCoords are expression functions, NOT statements: writing bare ClearCoords[99] causes an immediate syntax error ("Unrecognized file format: L<n>[ClearCoords]", RESET). Always assign them to a variable: #0 = ClearCoords[99]. *(FIRMWARE-RE 0x000a4cac, 0x000a4ef8; bench run 2026-11-03)*
+- ⛔ ClearCoords and RecordCoords are expression functions, NOT statements: writing bare ClearCoords[99] causes an immediate syntax error ("Unrecognized file format: L<n>[ClearCoords]", RESET). Always assign them to a variable: #0 = ClearCoords[99]. *(FIRMWARE-RE 0x000a4cac, 0x000a4ef8; bench runs 2026-11-03 and 2026-11-04 (t4024))*
 - ⛔ Axis coordinate words reject leading plus signs: G0 X+15.0 causes an immediate syntax error (RESET) before motion begins. Never write leading plus signs on axis coordinates. *(flex scanner Rule 14; bench run 2026-11-03)*
 - ⛔ L on a drill cycle repeats the step from the last hole, not the same hole, and K is ignored: write each hole on its own line. *(the drill-cycle test, 2026-10-30)*
 - ⛔ Unimplemented canned boring cycles (G85-G89) pass as a SILENT NO-OP: on stock firmware O9085-O9089 do not exist in sysdisk/slib.nc. When called, the subprogram lookup returns null and the executor cleanly returns 0 with zero motion, zero alarm, and advances to the next block instantly. The hole remains unmachined without warning. (Custom macros can be added to sysdisk/slib.nc to implement them without binary patches). *(AUDIT_CANNED_G85_SILENT_NOOP, TAP_G84, TAP_G74, bench runs (2026-11-02); FIRMWARE-RE 0x000da510)*
