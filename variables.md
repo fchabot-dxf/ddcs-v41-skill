@@ -12,7 +12,7 @@ Where a read or a write comes from, and when it works. Each mark points to the f
 | a hook macro (an M-code body, a K-key or key-N macro, a start or error hook) | ❔ | ❔ | ⚠️ integration.md (a merged slib-m.nc with an O10012 block) | ❔ | ✅ integration.md (a merged slib-m.nc with an O10012 block) |
 | MDI (a line typed on the pendant) | ❔ | ❔ | ❔ | ❔ | ❔ |
 | injected G-code (Modbus register 3000) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) |
-| the uservar file (a PC, over the share) | ✅ integration.md (uservar readback) | ⚠️ integration.md (dispatcher heartbeat #246) · ⚠️ integration.md (AUDIT_LOOKAHEAD_TOAST) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ✅ integration.md (a bench script) |
+| the uservar file (a PC, over the share) | ✅ integration.md (uservar readback) | ⚠️ integration.md (dispatcher heartbeat #246) · ⚠️ integration.md (AUDIT_M47_QUIRKS and AUDIT_M47_DIALOG) · ⚠️ integration.md (AUDIT_LOOKAHEAD_TOAST) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ⛔ integration.md (a bench script) · ⛔ hazards.md (a bench script) | ✅ integration.md (a bench script) |
 | Modbus registers (a PC) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) | ⛔ integration.md (firmware string scan 2025-04-04) |
 | the setting file / Param page | ✅ integration.md (a bench script) | ❔ | ⚠️ ui.md (#324 change) | ❔ | ❔ |
 | the pendant | ❔ | ❔ | ⚠️ ui.md (a bench script: numpad * and 5 holds) | ❔ | ❔ |
@@ -29,7 +29,7 @@ What is declared or measured about these variables beyond the table, each with i
 |---|---|---|---|
 | #100 | ⛔ reserved | #100 is the DDCS V4.1's dialog control variable: any dialog resets it to 0. Never keep data in it. | declared; not bench-measured |
 | #100 | ⚠ the firmware writes it | The dialog control variable: a normal dialog resets it to 0 while open; 1 closes a non-blocking dialog. | AUDIT_R22, AUDIT_R23, AUDIT_R24 |
-| #100-#499 | measured | Persist through power-off; the system share's uservar file holds them (slot = #var - 100), written at program start and end, by the time a program pauses at an M0, and continuously while a dialog or toast is open. A PC reads it, never writes it: only a reboot loads the file. | uservar readback |
+| #100-#499 | measured | Persist through power-off; the system share's uservar file holds them (slot = #var - 100), written at program start and end, by the time a program pauses at an M0, and continuously while a dialog or toast is open. A PC reads it, never writes it: only a reboot loads the file. | uservar readback; firmware RE 2026-11-02 |
 | #101 | ⛔ reserved | #101-#148 are the DDCS V4.1's own dialog memory (the operator's remembered tool-change and probe defaults). Never keep data in it. | declared; not bench-measured |
 | #102 | ⛔ reserved | #101-#148 are the DDCS V4.1's own dialog memory (M6.rc binds #102-#105). Never keep data in it. | declared; not bench-measured |
 | #103 | ⛔ reserved | #101-#148 are the DDCS V4.1's own dialog memory (M6.rc binds #102-#105). Never keep data in it. | declared; not bench-measured |
